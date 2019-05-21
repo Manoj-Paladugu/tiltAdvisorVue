@@ -1,8 +1,9 @@
 import Vue from 'vue'
 import App from './App.vue'
 import  Venues  from './Venues.vue';
+import  userVenues  from './userVenues.vue';
 import  Venue  from './Venue.vue';
-
+import  User  from './User.vue';
 import Vuetify from 'vuetify'
 Vue.use(Vuetify);
 import VueCookie from 'vue-cookie';
@@ -19,24 +20,34 @@ Vue.use(VueRouter);
 import  VueResource  from  'vue-resource';
 Vue.use(VueResource);
 
-import Vuelidate from 'vuelidate'
-Vue.use(Vuelidate)
+// import Vuelidate from 'vuelidate'
+// Vue.use(Vuelidate)
 
 const routes = [
   {
-    path : "/venues",
+    path : "/api/v1/venues",
     name : "venues",
     component : Venues
   },
   {
-    path : "/venues/:venueId",
+    path : "/api/v1/myVenues",
+    name : "userVenues",
+    component : userVenues
+  },
+  {
+    path : "/api/v1/venues/:venueId",
     name : "venue",
     component : Venue
   },
   {
-    path : "/venues/:cityName",
+    path : "/api/v1/venues/:cityName",
     name : "city",
     component : Venues
+  },
+  {
+    path : "/api/v1/users/:id",
+    name : "user",
+    component : User
   }
 ];
 

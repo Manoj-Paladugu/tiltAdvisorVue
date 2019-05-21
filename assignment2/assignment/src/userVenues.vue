@@ -1,110 +1,77 @@
-<template xmlns:v-slot="http://www.w3.org/1999/XSL/Transform">
+<template >
   <div>
 
-<!--    Venues-->
+<!--    myVenues-->
     <div  v-if = "errorFlag"  style = " color : red ; ">
       {{ error  }}
     </div>
 
     <Navbar></Navbar>
-      <div  id = "venues">
+    <div  id = "venues">
 
-        <v-card-title>
-<!--          <template>-->
-<!--          <v-container id="dropdown-example" grid-list-xl>-->
-<!--            <v-layout row wrap>-->
-<!--              <v-flex xs12 sm4>-->
-<!--                <v-overflow-btn-->
-<!--                  value = ""-->
-<!--                  :items="options"-->
-<!--                  label="Drop Down"-->
-<!--                  target="#dropdown-example"-->
-<!--                ></v-overflow-btn>-->
-<!--              </v-flex>-->
-<!--            </v-layout>-->
-<!--          </v-container>-->
-<!--          </template>-->
+      <v-card-title>
 
-<!--          <v-spacer></v-spacer>-->
-<!--          <b-dropdown id="ddown-buttons" text="Select Category:" class="m-2"-->
-<!--                      >-->
+      </v-card-title>
+      <div>
+        <b-row>
+          <b-col md="6" class="my-1">
+            <b-pagination
+              v-model="currentPage"
+              :total-rows="totalRows"
+              :per-page="perPage"
+              class="my-0"
+            ></b-pagination>
+          </b-col>
+        </b-row>
+        <b-table striped hover :items="venues" :fields="fields" :sort-by.sync="meanStarRating" :sort-desc.sync="sortDesc"
+                 :filter="filter" :current-page="currentPage" :total-rows="totalRows" :per-page="perPage" @filtered="onFiltered">
 
-<!--            <b-dropdown-item-button v-on:click="getVenuesByCategory(1)"> Accommodation </b-dropdown-item-button>-->
-<!--            <b-dropdown-item-button v-on:click="getVenuesByCategory(2)"> Cafés & Restaurants </b-dropdown-item-button>-->
-<!--            <b-dropdown-item-button v-on:click="getVenuesByCategory(3)"> Attractions </b-dropdown-item-button>-->
-<!--            <b-dropdown-item-button v-on:click="getVenuesByCategory(4)"> Events </b-dropdown-item-button>-->
-<!--            <b-dropdown-item-button v-on:click="getVenuesByCategory(5)"> Nature Spots </b-dropdown-item-button>-->
-<!--            <b-dropdown-item-button v-on:click="getVenuesByCategory(6)"> All </b-dropdown-item-button>-->
-
-<!--          </b-dropdown>-->
-
-          <div>
-            <strong>Category</strong>
-            <b-form-select v-model="categoryOptionSelected" :options="categoryOptions" @input="updateVenues"></b-form-select>
-          </div>
-
-          <div>
-            <strong>Star Rating</strong>
-            <b-form-select v-model="minStarOptionSelected" :options="minStarOptions" @input="updateVenues"></b-form-select>
-          </div>
-
-          <div>
-            <strong>Cost Rating</strong>
-            <b-form-select v-model="maxCostOptionSelected" :options="maxCostOptions" @input="updateVenues"></b-form-select>
-          </div>
-
-          <div>
-            <b-button @click="updateVenues">View Distance</b-button>
-          </div>
-
-
-
-          <v-text-field
-            v-model="search"
-            append-icon="search"
-            label=""
-            single-line
-            hide-details
-            @input="updateVenues"
-          ></v-text-field>
-        </v-card-title>
-        <div>
-          <b-row>
-            <b-col md="6" class="my-1">
-              <b-pagination
-                v-model="currentPage"
-                :total-rows="totalRows"
-                :per-page="perPage"
-                class="my-0"
-              ></b-pagination>
-            </b-col>
-          </b-row>
-          <b-table striped hover :items="venues" :fields="fields" :sort-by.sync="meanStarRating" :sort-desc.sync="sortDesc"
-                   :filter="filter" :current-page="currentPage" :total-rows="totalRows" :per-page="perPage" @filtered="onFiltered">
-
-            <template slot="distance" slot-scope="row">
-
-                <td>
-                  {{row.value}}
-                </td>
-
-            </template>
-
-            <template slot="venueName" slot-scope="row">
-              <router-link :to = "{ name: 'venue', params: { venueId: row.item.venueId}}" >
-                <td>
-                  {{row.value}}
-                </td>
-              </router-link>
-            </template>
-
-            <template slot="city" slot-scope="row">
-              <router-link @click.native="getVenuesInCity($route.params.cityName)" :to = "{ name: 'city', params: { cityName: row.value}}" >
-                <b-button v-b-modal="'my-modal'" size="sm" class="mr-1">
+          <template slot="venueName" slot-scope="row">
+            <router-link :to = "{ name: 'venue', params: { venueId: row.item.venueId}}" >
+              <td>
                 {{row.value}}
-                </b-button>
-              </router-link>
-            </template>
+              </td>
+            </router-link>
+          </template>
+
+          <template slot="city" slot-scope="row">
+            <router-link @click.native="getVenuesInCity($route.params.cityName)" :to = "{ name: 'city', params: { cityName: row.value}}" >
+              <b-button v-b-modal="'my-modal'" size="sm" class="mr-1">
+                {{row.value}}
+              </b-button>
+            </router-link>
+          </template>
+
+          <template slot="primaryPhoto" slot-scope="row">
+              <span v-if="row.value !== ''">
+              <b-img width="200" height="200" v-bind:src="getVenuePhoto(row.item.venueId,row.value)" rounded alt="Rounded image"></b-img>
+              </span>
+            <span v-else>
+                <b-img width="200" height="200" v-bind="mainProps" v-bind:src="getVenuePhoto(row.item.venueId,row.value)" rounded alt="Rounded image"></b-img>
+              </span>
+          </template>
+
+
+          <!--            <span slot="city" slot-scope="data" v-html="data.value"></span>-->
+        </b-table>
+
+        <b-row>
+          <b-col md="6" class="my-1">
+            <b-pagination
+              v-model="currentPage"
+              :total-rows="totalRows"
+              :per-page="perPage"
+              class="my-0"
+            ></b-pagination>
+          </b-col>
+        </b-row>
+
+        <b-modal  id="my-modal" size="xl" title="Venues In The City" no-close-on-backdrop hide-footer>
+
+          <!--            {{getVenuesInCity($route.params.cityName)}}-->
+          <!--             fieldsForInCity : [{key: 'venueId', sortable: true}, 'venueName',{key: 'categoryId', sortable: true} , 'shortDescription', 'latitude', 'longitude', 'meanStarRating','modeCostRating', 'city', 'primaryPhoto'],-->
+
+          <b-table striped hover :items="venuesInCity" :fields="fields">
 
             <template slot="primaryPhoto" slot-scope="row">
               <span v-if="row.value !== ''">
@@ -115,44 +82,13 @@
               </span>
             </template>
 
-
-<!--            <span slot="city" slot-scope="data" v-html="data.value"></span>-->
           </b-table>
 
-          <b-row>
-            <b-col md="6" class="my-1">
-              <b-pagination
-                v-model="currentPage"
-                :total-rows="totalRows"
-                :per-page="perPage"
-                class="my-0"
-              ></b-pagination>
-            </b-col>
-          </b-row>
-
-          <b-modal  id="my-modal" size="xl" title="Venues In The City" no-close-on-backdrop hide-footer>
-
-            <!--            {{getVenuesInCity($route.params.cityName)}}-->
-<!--             fieldsForInCity : [{key: 'venueId', sortable: true}, 'venueName',{key: 'categoryId', sortable: true} , 'shortDescription', 'latitude', 'longitude', 'meanStarRating','modeCostRating', 'city', 'primaryPhoto'],-->
-
-              <b-table striped hover :items="venuesInCity" :fields="fields">
-
-                <template slot="primaryPhoto" slot-scope="row">
-              <span v-if="row.value !== ''">
-              <b-img width="200" height="200" v-bind:src="getVenuePhoto(row.item.venueId,row.value)" rounded alt="Rounded image"></b-img>
-              </span>
-                  <span v-else>
-                <b-img width="200" height="200" v-bind="mainProps" v-bind:src="getVenuePhoto(row.item.venueId,row.value)" rounded alt="Rounded image"></b-img>
-              </span>
-                </template>
-
-              </b-table>
-
-            <router-link :to = "{ name: 'venues'}" > <b-button class="mt-3" block @click="$bvModal.hide('my-modal')">Close Me</b-button></router-link>
+          <router-link :to = "{ name: 'venues'}" > <b-button class="mt-3" block @click="$bvModal.hide('my-modal')">Close Me</b-button></router-link>
 
 
-          </b-modal>
-        </div>
+        </b-modal>
+      </div>
 
     </div>
 
@@ -176,11 +112,11 @@
         mainProps: { blank: true, blankColor: '#777', width: 75, height: 75, class: 'm1' },
         errorFlag :  false,
         fields: [{key: 'venueId', sortable: true}, 'venueName',{key: 'categoryId',label : 'Category', sortable: true} , 'shortDescription',  {key: 'meanStarRating', sortable: true},
-          {key: 'modeCostRating', sortable: true},{key: 'distance', sortable: true}, 'city',{key: 'primaryPhoto',sortable: true}],
+          {key: 'modeCostRating', sortable: true}, 'city',{key: 'primaryPhoto',sortable: true}],
         venues :  [],
         venuesInCity : [],
         categories : [],
-        search : null,
+        search : "",
         searchTerm : "",
         options: [
           {value: 1, text: 'Accommodation'},
@@ -212,7 +148,6 @@
         minStarRatingVal : 0,
         minStarOptionSelected: 1,
         maxCostOptionSelected : 4,
-        sortDistanceOptionSelected : -1,
         minStarOptions: [
           { value: 1, text: 'Any' },
           { value: 1, text: '>= 1' },
@@ -236,26 +171,43 @@
           { value: 2, text: '$$' },
           { value: 3, text: '$$$' },
           { value: 4, text: '$$$$' }
-        ],
-
-        lat : 0,
-        long : 0
+        ]
       }
     },
     mounted :  function () {
-      this.updateMyLocation();
       this . getCategories ();
-      this.updateVenues();
-      this.totalRows = this.venues.length;
+      this . getVenues ();
+      this.totalRows = this.venues.length
+      // this . getCategory ();
     },
     methods : {
 
-      updateMyLocation : function() {
-        navigator.geolocation.getCurrentPosition((location) => {
-          this.lat =  Math.floor(Number(location.coords.latitude));
-          this.long =  Math.floor(Number(location.coords.longitude));
-        });
+      getVenues: function () {
+        this.$http.get('http://localhost:4941/api/v1/venues', {params : {"adminId": this.$cookie.get('userId')}})
+          .then(function (response) {
+            this.venues = response.data;
+          }, function (error) {
+            this.error = error;
+            this.errorFlag = true;
+          }).then ( () =>
+            this.venues.forEach(
+              (value, index) => {
+                value.categoryId = this.getCategoryById(this.venues[index].categoryId).categoryName;
+                if (this.venues[index].meanStarRating === null) {this.venues[index].meanStarRating = 3}
+                if (this.venues[index].modeCostRating === null) {this.venues[index].modeCostRating = 0}
+                // value.city = 'This is <i>raw <strong>{{$this.venues[index].categoryId}}</strong></i> <span style="color:red">content</span>';
+                // if (this.venues[index])
+                this.totalRows = this.venues.length
+                // console.log(index);
+                console.log("reee" + value.categoryId)
+              }
+            )
+          // console.log("Reee" + this.venues[0].categoryId)
+        );
+
+
       },
+
       onFiltered(filteredItems) {
         // Trigger pagination to update the number of buttons/pages due to filtering
         this.totalRows = filteredItems.length
@@ -283,14 +235,6 @@
             this.errorFlag = true;
           });
 
-
-        // for ( let i  =  0 ; i  <  this.categories.length ; i ++){
-        //   if ( this.categories[i].categoryId  === Id ){
-        //      return this.categories[i];
-        //      // console.log(this.categories[i].categoryName);
-        //   }
-        // }
-        // return venues;
       },
 
       getCategoryById: function (Id) {
@@ -301,53 +245,43 @@
           }
         }
       },
-      // getCategoryByName: function (name) {
-      //   for (let i = 0; i < this.categories.length; i++) {
-      //     if (this.categories[i].categoryId === name) {
-      //       return this.categories[i];
-      //       // console.log(this.categories[i].categoryName);
-      //     }
-      //   }
-      // },
-      updateVenues: function () {
 
+      updateSearch: function () {
+        // alert("here" + this.minStarOptionSelected)
         let paramLst = {
-
           "categoryId": this.categoryOptionSelected,
           "minStarRating" : this.minStarOptionSelected,
-          "maxCostRating" : this.maxCostOptionSelected,
-          "myLatitude" : this.lat,
-          "myLongitude" : this.long
+          "maxCostRating" : this.maxCostOptionSelected
         };
-        // alert(this.lat)
-
-        if (this.search !== null && this.search !== '') {paramLst.q = this.search}
-        else { delete paramLst['q']}
+        if (this.search !== "") {paramLst["q"] = this.search}
+        // if (this.minStarOptionSelected !== -1) {
+        //   paramLst["minStarRating"] = this.minStarOptionSelected
+        // }
+        // if (this.maxCostOptionSelected !== -1) {
+        //   paramLst["maxCostRating"] = this.maxCostOptionSelected
+        // }
         this.$http.get('http://localhost:4941/api/v1/venues', {
-          params: paramLst
+            // params: paramLst
+            params: paramLst
           }
         ).then((response) => {
+          console.log(response);
           this.venues = response.data;
-          return response.data;
         }, function (error) {
           console.log(error);
-        }).then((response) => {
+        }).then(() =>
           this.venues.forEach(
-          (value, index) => {
-
-            value.categoryId = this.getCategoryById(response[index].categoryId).categoryName;
-
-            if (response[index].meanStarRating === null) {response[index].meanStarRating = 3}
-            if (response[index].modeCostRating === null) {response[index].modeCostRating = 0}
-            // if (this.venues[index].distance !== null) {this.venues[index].distance = 0}
-            console.log("reee" + value.categoryId)
-          }
-          );
-            this.venues = response;
-
-            this.totalRows = this.venues.length;
-        }
-
+            (value, index) => {
+              value.categoryId = this.getCategoryById(this.venues[index].categoryId).categoryName;
+              // alert(JSON.stringify(this.venues[index]))
+              if (this.venues[index].meanStarRating === null) {this.venues[index].meanStarRating = 3}
+              if (this.venues[index].modeCostRating === null) {this.venues[index].modeCostRating = 0}
+              // value.city = 'This is <i>raw <strong>{{$this.venues[index].categoryId}}</strong></i> <span style="color:red">content</span>';
+              this.totalRows = this.venues.length;
+              // console.log(index);
+              console.log("reee" + value.categoryId)
+            }
+          )
         )
       },
       getVenuePhoto: function (venueId,VenuePhotoFileName) {
@@ -367,7 +301,7 @@
         ).then(function (response) {
           this.venues = [];
 
-          if (categoryId === 6) {this.venues = this.updateVenues()}
+          if (categoryId === 6) {this.venues = this.getVenues()}
           else {
             response.body.forEach(
               (value, index) => {
@@ -402,7 +336,7 @@
           }
         ).then( (response) => {
           // alert(JSON.stringify(response.body))
-            this.venues = response.body;
+          this.venues = response.body;
           // for (let i = 0; i < allVenues.length;i++) {
           //   console.log("a  " + allVenues[i]);
           //   if (allVenues[i].meanStarRating === 3 && allVenues[i].meanStarRating >= id) {this.venues.push(allVenues[i])}

@@ -1,249 +1,119 @@
-<template xmlns:v-slot="http://www.w3.org/1999/XSL/Transform">
+<template>
 
   <div>
-<!--    Venue-->
+<!--    User-->
     <div  v-if = "errorFlag"  style = " color : red ; ">
       {{ error  }}
     </div>
     <Navbar></Navbar>
 
-    <div class="row">
-      <b-jumbotron class="jumbotron text-center col-md-8">
-        <template slot="header">{{this.venue.venueName}}</template>
-<!--        <template  v-if="this.venue.longDescription !== ''">-->
-<!--          Long Description : {{ this.venue.longDescription}}-->
-<!--        </template>-->
-        <hr class="my-4">
-        <div id="venues" v-for = "venue in venues">
-          <p v-if="venue.venueId === parseInt($route.params.venueId)">Star Rating : {{ venue.meanStarRating }} </p>
-          <p v-if="venue.venueId === parseInt($route.params.venueId)">Cost Rating : {{ venue.modeCostRating }} </p>
-
-        </div>
-        <p >Venue Admin : {{ this.venue.admin.username }} </p>
-        <p>Venue added on : {{this.venue.dateAdded}}</p>
-        <p>Category : {{this.venue.category.categoryName}}</p>
-        <p>Category Desc : {{this.venue.category.categoryDescription}}</p>
-        <p >City : {{ this.venue.city }} </p>
-        <p>
-          Address : {{this.venue.address}}
-        </p>
-        <hr class="my-4">
-        <template slot="lead">
-         Description :  {{this.venue.shortDescription}}.
-        </template>
-        <template slot="lead">
-          {{this.venue.longDescription}}
-        </template>
-        <hr class="my-4">
-        <div>
-          <b-button variant="primary" href="#" v-if="this.venue.admin.userId === parseInt(this.$cookie.get('userId'))" v-b-modal="'editVenue-modal'">Edit Venue</b-button>
-          <b-form-file accept="image/jpeg, image/png" class="mb-2" v-model="venuePhoto" :state="isFileChosen" v-if="this.venue.admin.userId === parseInt(this.$cookie.get('userId'))" ></b-form-file>
-
-          <b-button variant="primary" href="#" @click="addVenueImage" :state="isFileChosen" v-if="this.venue.admin.userId === parseInt(this.$cookie.get('userId'))">Add Photo</b-button>
-          <b-form-invalid-feedback :state="isFileChosen">
-            <strong v-if="this.venue.admin.userId === parseInt(this.$cookie.get('userId'))">{{isFileChosenError}}</strong>
-          </b-form-invalid-feedback>
-          <b-button variant="primary" href="#" @click="deleteVenueImage" v-if="this.venue.admin.userId === parseInt(this.$cookie.get('userId'))">Delete Current Photo</b-button>
-          <b-button variant="primary" href="#" @click="setVenueImagePrimary" v-if="this.venue.admin.userId === parseInt(this.$cookie.get('userId'))">Set Current Photo As Primary</b-button>
-        </div>
-      </b-jumbotron>
-<!--        <b-jumbotron v-if="this.venue.photos.length !== 0" text-variant="white" border-variant="dark" class="jumbotron text-center col-md-4" style="background-size:cover" :style="{'background-image': `url(${(getVenuePhoto($route.params.venueId,this.venue.photos[0].photoFilename))})`}" >-->
-<!--          <template slot="header">{{this.venue.photos[0].photoDescription}}</template>-->
-<!--&lt;!&ndash;          <b-img class="text-center col-md-4" width="200" height="200" v-bind:src="getVenuePhoto($route.params.venueId,this.venue.photos[0].photoFilename)" rounded alt="Rounded image"></b-img>&ndash;&gt;-->
-<!--          <b-button variant="primary" href="#">Edit Photo</b-button>-->
-<!--        </b-jumbotron>-->
-
-      <div class="text-center col-md-4" v-if="this.venue.photos.length === 0">
-        <b-carousel
-
-          id="carousel-1"
-          v-model="slide"
-          :interval="1500"
-          controls
-          indicators
-          background="#ababab"
-          img-width="1024"
-          img-height="480"
-          style="text-shadow: 1px 1px 2px #333;"
-          @sliding-start="onSlideStart"
-          @sliding-end="onSlideEnd"
-        >
+    <div v-if="this.$cookie.get('userId') === this.$route.params.id">
+      <div class="row">
+        <b-jumbotron class="jumbotron text-center col-md-8">
+          <template slot="header">Welcome {{this.user.givenName}}!</template>
+          <p slot="lead">
+            Full Name : {{this.user.givenName}} {{this.user.familyName}}
+          </p>
+          <p slot="lead">Username : {{this.user.username}} </p>
+          <p slot="lead">Email : {{this.user.email}} </p>
 
 
-          <!-- Slides with custom text -->
-          <b-carousel-slide img-src="https://picsum.photos/1024/480/?image=54">
-            <h1>Hello world!</h1>
-          </b-carousel-slide>
+          <hr class="my-4">
 
 
-          <b-carousel-slide caption="Default Images" img-blank img-alt="Blank image">
-            <p>
 
-            </p>
-          </b-carousel-slide>
-        </b-carousel>
-
-      </div>
-
-      <div class="text-center col-md-4" v-else>
-        <b-carousel
-
-          v-model="slide"
-          :interval="4000"
-          controls
-          indicators
-          background="#ababab"
-          img-width="1024"
-          img-height="480"
-          style="text-shadow: 1px 1px 2px #333;"
-          @sliding-start="onSlideStart"
-          @sliding-end="onSlideEnd"
-        >
-          <div class="carousel-inner">
-            <div class="carousel-item" v-for="(banner,idx) in this.allVenuePhotos" :class="{ active: idx==0 }">
-              <img :src="getVenuePhoto(banner)" alt="" class="img-fluid">
-
-            </div>
+          <div>
+          <b-button variant="primary" href="#" v-b-modal="'editProfile-modal'">Edit Profile</b-button>
+          <b-form-file accept="image/jpeg, image/png" class="mb-2" v-model="profilePhoto" :state="isFileChosen"  ></b-form-file>
+            <b-button variant="primary" href="#" @click="editProfileImage" :state="isFileChosen" >Update Photo</b-button>
+            <b-form-invalid-feedback :state="isFileChosen">
+              <strong>{{isFileChosenError}}</strong>
+            </b-form-invalid-feedback>
+            <b-button variant="primary" href="#" @click="deleteProfileImage">Delete Photo</b-button>
           </div>
-          {{this.allVenueDescriptions[this.slide]}}
-
-        </b-carousel>
-
-        <p class="mt-4">
-          Slide #: {{ slide }}<br>
-          Sliding: {{ sliding }}
-        </p>
-      </div>
-
-
-    </div>
-
-    <div>
-      <b-jumbotron header="Reviews" lead="for this venue" >
-        <div class="text-right" v-if="this.$cookie.get('authToken') && !this.reviews.some(item => item.reviewAuthor.userId === parseInt(this.$cookie.get('userId')))">
-          <b-button v-b-modal="'review-modal'" variant="primary" href="#" v-if="this.venue.admin.userId !== parseInt(this.$cookie.get('userId'))">  Add Review</b-button>
-
-<!--          modal for posting a review-->
-
-          <b-modal  id="review-modal" size="xl" title="Add a review" hide-footer>
-            <b-form  @submit="addReview">
-              <b-card bg-variant="light" class="m-4 p-2">
-
-                <b-form-group
-                  horizontal
-                  label="Star Rating:"
-                  required
-                >
-                  <b-form-input v-model="starRating" type="number" inline ></b-form-input>
-                </b-form-group>
-
-                <b-form-group
-                  horizontal
-                  label="costRating:"
-                  label-for="input-4"
-                >
-                  <b-form-input type="number" v-model="costRating" inline required></b-form-input>
-                </b-form-group>
-
-                <b-form-invalid-feedback >
-                  <strong>{{error}}</strong>
-                </b-form-invalid-feedback>
-
-                <b-form-group horizontal label="reviewBody:" description="You must provide a review in order to submit.">
-                  <b-form-input v-model="reviewBody" type="text" inline required></b-form-input>
-                </b-form-group>
-
-                <b-btn style="float: right" variant="primary" type="submit" data-dismiss="modal@click=" >Submit</b-btn>
-                <!--          @click="$bvModal.hide('register-modal')"-->
-
-              </b-card>
-            </b-form>
-          </b-modal>
-
-
+        </b-jumbotron>
+        <div class="text-center col-md-4">
+<!--          <b-img src="./default_profile_photo.png" ></b-img>-->
+          <b-img thumbnail fluid :src=currentPhoto alt="Image 1"></b-img>
         </div>
-        <b-table striped hover :items="reviews">
-          <template slot="reviewAuthor" slot-scope="row">
-              <td>
-                {{row.value.username}}
-              </td>
+<!--          <b-jumbotron text-variant="white" border-variant="dark" class="jumbotron text-center col-md-4" style="background-size:cover" v-bind:style="{ 'background-image': 'url(' + currentPhoto + ')' }" >-->
+<!--            <template slot="header"></template>-->
+<!--            &lt;!&ndash;          <b-img class="text-center col-md-4" width="200" height="200" v-bind:src="getVenuePhoto($route.params.venueId,this.venue.photos[0].photoFilename)" rounded alt="Rounded image"></b-img>&ndash;&gt;-->
+<!--            <b-button variant="primary" href="#" @click="getProfilePhoto">Edit Photo</b-button>-->
+<!--          </b-jumbotron>-->
+      </div>
+      <b-modal  id="editProfile-modal" size="xl" title="Edit Profile" hide-footer>
+        <b-form @submit.stop.prevent="editUserProfile">
+          <b-card bg-variant="light" class="m-4 p-2">
+            <b-form-group
+              horizontal
+              label="Given Name:"
+              label-for="input-3"
+              required
+            >
+              <b-form-input v-model="newGivenName" type="text" inline ></b-form-input>
+            </b-form-group>
 
-          </template>
-        </b-table>
-      </b-jumbotron>
+            <b-form-group
+              horizontal
+              label="Family Name:"
+              label-for="input-4"
+            >
+              <b-form-input type="text" v-model="newFamilyName" inline required></b-form-input>
+            </b-form-group>
+
+            <b-form-invalid-feedback >
+              <strong>{{error}}</strong>
+            </b-form-invalid-feedback>
+
+            <b-form-group horizontal label="Current Password:">
+              <b-form-input v-model="oldPassword" type="password" inline required :state="oldPasswordValidation"></b-form-input>
+            </b-form-group>
+
+            <b-form-invalid-feedback :state="oldPasswordValidation">
+              <strong>Incorrect current password entered.</strong>
+            </b-form-invalid-feedback>
+
+            <b-form-group horizontal label="New Password:" description="We'll never share your password with anyone else.">
+              <b-form-input v-model="newPassword" type="password" inline required></b-form-input>
+            </b-form-group>
+
+            <b-button style="float: right" variant="primary" type="submit" data-dismiss="modal@click=" >Submit</b-button>
+            <!--          @click="$bvModal.hide('register-modal')"-->
+
+          </b-card>
+        </b-form>
+      </b-modal>
+
     </div>
+    <div v-else>
+      <div class="row">
+        <b-jumbotron class="jumbotron text-center col-md-8">
+          <template slot="header">Welcome {{this.user.givenName}}!</template>
+          <p slot="lead">
+            Full Name : {{this.user.givenName}} {{this.user.familyName}}
+          </p>
+          <p slot="lead">Username : {{this.user.username}} </p>
 
-    <b-modal  id="editVenue-modal" size="xl" title="Edit Venue Details" hide-footer>
-      <b-form @submit.stop.prevent="editAdminVenue">
-        <b-card bg-variant="light" class="m-4 p-2">
-          <b-form-group
-            horizontal
-            label="Venue Name:"
-          >
-            <b-form-input required type="text" v-model="venueName" ></b-form-input>
-          </b-form-group>
 
-          <b-form-group
-            horizontal
-            label="Category Type:"
-          >
-            <b-form-select type="number" v-model="optionSelected" :options="options"></b-form-select>
-          </b-form-group>
+          <hr class="my-4">
 
-          <b-form-group
-            horizontal
-            label="Short Description:"
-            required
-          >
-            <b-form-input v-model="shortDescription"  inline required></b-form-input>
-          </b-form-group>
-
-          <b-form-group
-            horizontal
-            label="Long Description:"
-          >
-            <b-form-input  type="text" v-model="longDescription" inline required></b-form-input>
-          </b-form-group>
-          <b-form-invalid-feedback :state="validation">
-            <strong>{{error}}</strong>
-          </b-form-invalid-feedback>
-
-          <b-form-group
-            horizontal
-            label="City:"
-          >
-            <b-form-input required type="text" v-model="venueCity"  inline></b-form-input>
-          </b-form-group>
-
-          <b-form-group
-            horizontal
-            label="Address:"
-          >
-            <b-form-input required type="text" v-model="address"  inline></b-form-input>
-          </b-form-group>
-
-          <b-form-group
-            horizontal
-            label="Latitude:"
-          >
-            <b-form-input required type="number" v-model="latitude"  inline></b-form-input>
-          </b-form-group>
-
-          <b-form-group
-            horizontal
-            label="Longitude:"
-          >
-            <b-form-input required type="number" v-model="longitude"  inline></b-form-input>
-          </b-form-group>
-
-          <b-button style="float: right" variant="primary" type="submit" data-dismiss="modal@click=" >Submit</b-button>
-          <!--          @click="$bvModal.hide('register-modal')"-->
-
-        </b-card>
-      </b-form>
-    </b-modal>
-
+          <b-button variant="success" href="#">Do Something Else</b-button>
+        </b-jumbotron>
+        <div class="text-center col-md-4">
+          <!--          <b-img src="./default_profile_photo.png" ></b-img>-->
+          <b-img thumbnail fluid :src=currentPhoto alt="Image 1"></b-img>
+        </div>
+<!--              <b-jumbotron text-variant="white" border-variant="dark" class="jumbotron text-center col-md-4" style="background-size:cover" :style="{'background-image': `url(${getProfilePhoto()})`}" >-->
+<!--                <template slot="header"></template>-->
+<!--                &lt;!&ndash;          <b-img class="text-center col-md-4" width="200" height="200" v-bind:src="getVenuePhoto($route.params.venueId,this.venue.photos[0].photoFilename)" rounded alt="Rounded image"></b-img>&ndash;&gt;-->
+<!--&lt;!&ndash;                <b-button variant="primary" href="#">Edit Photo</b-button>&ndash;&gt;-->
+<!--              </b-jumbotron>-->
+      </div>
+    </div>
+<!--    <img src="./default_profile_photo.png" />-->
   </div>
+
 </template>
 
 
@@ -253,16 +123,19 @@
     components: {Navbar},
     data  (){
       return{
-        venuePhoto : null,
-        description : "",
-        slide: 0,
-        sliding: null,
+        currentPhoto : null,
+        profilePhoto : null,
+        oldPassword : "",
+        newGivenName : "",
+        newFamilyName : "",
+        newPassword : "",
         reviewBody : "",
         starRating : "",
         costRating : "",
         reviews : [],
         // reviewFields : ['reviewAuthor'],
         venue : {},
+        user : {},
         totalRows: 1,
         currentPage: 1,
         perPage: 10,
@@ -284,6 +157,7 @@
           {value: 3, text: 'Attractions'},
           {value: 4, text: 'Events'},
           {value: 5, text: 'Nature Spots'},
+          {value: 6, text: 'Other'}
         ],
         headers1: [
           {
@@ -330,94 +204,105 @@
           { value: 2, text: '$$' },
           { value: 3, text: '$$$' },
           { value: 4, text: '$$$$' }
-        ],
-        allVenuePhotos : [],
-        allVenueDescriptions : []
+        ]
       }
     },
     mounted :  function () {
+
+      // alert(this.password)
+      this.getProfilePhoto();
       this . getCategories ();
       this. getReviews();
       this . getVenues ();
-      this . getVenue ();
-
+      this.getUserInfo();
+      // this . getVenue ();
       this.totalRows = this.venues.length
-
       // this . getCategory ();
     },
     methods : {
-      onSlideStart(slide) {
-        this.sliding = true
-      },
-      onSlideEnd(slide) {
-        this.sliding = false
-      },
-      setVenueImagePrimary : function() {
-        this.$http.post('http://localhost:4941/api/v1/venues/' + this.$route.params.venueId + '/photos/' + this.allVenuePhotos[this.slide] + '/setPrimary', {},{
+      deleteProfileImage : function() {
+        this.$http.delete('http://localhost:4941/api/v1/users/' + this.$route.params.id + '/photo', {
           headers: {
             'X-Authorization': this.$cookie.get('authToken')
           }
         }).then(function (response) {
-          // alert(JSON.stringify(response));
+          // alert(response);
           location.reload();
           // this.getProfilePhoto();
         })
       },
-      deleteVenueImage : function(){
-
-        this.$http.delete('http://localhost:4941/api/v1/venues/' + this.$route.params.venueId + '/photos/' + this.allVenuePhotos[this.slide], {
-          headers: {
-            'X-Authorization': this.$cookie.get('authToken')
-          }
-        }).then(function (response) {
-          // alert(JSON.stringify(response));
-          location.reload();
-          // this.getProfilePhoto();
-        })
-      },
-      addVenueImage : function(e) {
+      editProfileImage : function(e) {
         if(!this.isFileChosen) {e.preventDefault(); return;}
-        else if (this.venuePhoto.size > 1024 * 1024 * 20) {e.preventDefault(); return;}
+        else if (this.profilePhoto.size > 1024 * 1024 * 20) {e.preventDefault(); return;}
 
-
-        let formData = new FormData();
-        formData.append('photo',this.venuePhoto);
-        formData.append('description',this.description);
-        formData.append('makePrimary',"true");
-
-        this.$http.post('http://localhost:4941/api/v1/venues/' + this.$route.params.venueId + '/photos', formData, {
+        this.$http.put('http://localhost:4941/api/v1/users/' + this.$route.params.id + '/photo', this.profilePhoto, {
           headers: {
+            'Content-Type': 'image/png',
             'X-Authorization': this.$cookie.get('authToken')
           }
         }).then(function (response) {
-          // alert(JSON.stringify(response));
-          location.reload();
-        }, function (error) {
-          // alert(JSON.stringify(error));
+            // alert(response);
+            location.reload();
+            // this.getProfilePhoto();
         })
 
       },
-      editAdminVenue : function() {
+      getProfilePhoto : function() {
 
-        this.$http.patch('http://localhost:4941/api/v1/venues/' + this.$route.params.venueId, JSON.stringify({
-          venueName: this.venueName,
-          categoryId: this.optionSelected,
-          city: this.venueCity,
-          shortDescription: this.shortDescription,
-          longDescription: this.longDescription,
-          address: this.address,
-          latitude: parseInt(this.latitude),
-          longitude: parseInt(this.longitude),
-        }), {
+        this.$http.get('http://localhost:4941/api/v1/users/' + this.$route.params.id + '/photo')
+          .then( (response) => {
+            if (response.status === 200) {
+              // alert("here");
+              this.currentPhoto = 'http://localhost:4941/api/v1/users/' + this.$route.params.id + '/photo'
+            }
+          }, function (error) {
+            // alert(JSON.stringify(error));
+            if (error.status !== 200) {
+              this.currentPhoto = require('./default_profile_photo.png')
+            }
+          });
+
+      },
+      editUserProfile : function() {
+
+        // alert(this.newGivenName + this.newFamilyName + this.password + this.newPassword)
+        // alert(this.oldPasswordValidation)
+        if (this.oldPasswordValidation) {
+          // alert("here2");
+          this.$http.patch('http://localhost:4941/api/v1/users/' + this.$route.params.id, {
+            "givenName": this.newGivenName,
+            "familyName": this.newFamilyName,
+            "password": this.newPassword
+
+          }, {
+            headers: {
+              'Content-Type': 'application/json',
+              'X-Authorization': this.$cookie.get('authToken')
+            }
+          }).then(() => {
+              // alert("here3");
+              localStorage['cachedPassword'] = this.newPassword;
+              location.reload();
+              // console.log(JSON.stringify(response));
+            }
+          )
+        } else {alert("mistakes were made")}
+      },
+      getUserInfo : function () {
+        // alert(JSON.stringify(this.$route.params));
+        this.$http.get('http://localhost:4941/api/v1/users/' + this.$route.params.id,{
           headers: {
             'Content-Type': 'application/json',
             'X-Authorization': this.$cookie.get('authToken')
           }
-        }).then(function (response) {
-          // alert("here1")
-          // alert(JSON.stringify(response))
-          location.reload();
         })
+          .then(function (response) {
+            this.user = response.data;
+            // alert("here")
+            //   alert(this.$cookie.get('authToken'))
+            // alert(JSON.stringify(this.user));
+          })
+
       },
       addReview : function () {
         this.$http.post('http://localhost:4941/api/v1/venues/' + this.$route.params.venueId + '/reviews', JSON.stringify({
@@ -431,13 +316,13 @@
             'X-Authorization': this.$cookie.get('authToken')
           }
         }).then(function (response) {
-          // alert(JSON.stringify(response))
-          // alert("done");
+          alert(JSON.stringify(response))
+          alert("done");
           this. getReviews();
 
 
         }, function (error) {
-          // alert(JSON.stringify(error));
+          alert(JSON.stringify(error));
           // this.errorFlag = true;
           // this.userNameOrEmailError = error.statusText.substring(13);
           // alert(this.userNameOrEmailError);
@@ -458,21 +343,9 @@
         this.$http.get('http://localhost:4941/api/v1/venues/' + this.$route.params.venueId)
           .then(function (response) {
             this.venue = response.data;
-            // alert((this.venue.photos))
-            // alert((this.venue.photos[0]))
-            for (let i = 0; i < (this.venue.photos).length;i++){
-
-              // alert(this.venue.photos[i].photoFilename)
-              this.allVenuePhotos.push(this.venue.photos[i].photoFilename)
-              this.allVenueDescriptions.push(this.venue.photos[i].photoDescription)
-            }
-
-
-
-
             // alert("here")
             //   alert(this.$cookie.get('authToken'))
-            // alert(JSON.stringify(this.venue));
+            console.log(JSON.stringify(this.venue));
           })
 
       },
@@ -595,12 +468,12 @@
           )
         )
       },
-      getVenuePhoto: function (VenuePhotoFileName) {
+      getVenuePhoto: function (venueId,VenuePhotoFileName) {
         // console.log(venueId);
         // console.log( VenuePhotoFileName)
         // if (VenuePhotoFileName === "") {console.log(venueId + "empty")}
 
-        return 'http://localhost:4941/api/v1/venues/' + this.$route.params.venueId + '/photos/' + VenuePhotoFileName;
+        return 'http://localhost:4941/api/v1/venues/' + venueId + '/photos/' + VenuePhotoFileName;
       },
       getVenuesByCategory: function (categoryId) {
 
@@ -714,11 +587,21 @@
             return { text: f.label, value: f.key }
           })
       },
+      oldPasswordValidation() {
+        // alert(this.password + " " + this.confirmPassword)
+        if (this.oldPassword !== "" && this.oldPassword === localStorage.getItem("cachedPassword")) {
+
+          return true
+        }
+        // else if (this.password === "" ) {this.error = ""}
+        // else {this.passwordError = "Passwords do not match!"}
+        return false;
+      },
       isFileChosen() {
-        if (!Boolean(this.venuePhoto)){
+        if (!Boolean(this.profilePhoto)){
           this.isFileChosenError = "Please choose a file";
           return false;
-        } else if (this.venuePhoto.size > 1024 * 1024 * 20){
+        } else if (this.profilePhoto.size > 1024 * 1024 * 20){
           this.isFileChosenError = "File size too big (> 20MB)";
           return false;
         }
