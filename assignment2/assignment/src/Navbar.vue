@@ -2,7 +2,11 @@
   <div>
     <b-navbar toggleable="lg" type="dark" variant="dark">
 <!--      <b-navbar-brand href="#">Home</b-navbar-brand>-->
-      <router-link :to = "{ name: 'venues'}" ><b-button > Home </b-button> </router-link>
+      <b-navbar-nav class="ml-auto">
+        <router-link :to = "{ name: 'venues'}" ><b-button > Home </b-button> </router-link>
+        <router-link :to = "{ name: 'venues'}" ><b-button > Venues </b-button> </router-link>
+      </b-navbar-nav>
+
       <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
       <b-collapse id="nav-collapse" is-nav>
         <!-- Right aligned nav items -->
@@ -122,10 +126,13 @@
             <b-form-input v-model="password" type="password" inline required></b-form-input>
           </b-form-group>
 
-          <b-button style="float: right" variant="primary" type="submit" @click="hideLoginModal" >Login</b-button>
+          <b-button style="float: right" variant="primary" type="submit" >Login</b-button>
           <!--          @click="$bvModal.hide('register-modal')"-->
 
         </b-card>
+        <div v-if="loginErrorFlag" style="color: red;">
+          <strong>Invalid username or email entered. Please try again</strong>
+        </div>
       </b-form>
     </b-modal>
 
@@ -234,6 +241,7 @@
         passwordError : "",
         userNameOrEmailError : "",
         errorFlag : false,
+        loginErrorFlag : false,
         givenName : "",
         familyName : "",
         email : "",
@@ -269,9 +277,9 @@
 
         })
       },
-      hideLoginModal(){
-        this.$root.$emit('bv::hide::modal', 'login-modal', '#btnShow')
-      },
+      // hideLoginModal(){
+      //   this.$root.$emit('bv::hide::modal', 'login-modal', '#btnShow')
+      // },
       logoutUser : function() {
         this.$http.post('http://127.0.0.1:4941/api/v1/users/logout', {}, {
           headers: {
@@ -343,14 +351,15 @@
         }).then(function (response) {
           // alert("im here boi2")
           localStorage.setItem('cachedPassword', this.password);
-          this.$cookie.set("userId", response.body.userId)
-          this.$cookie.set("authToken", response.body.token)
+          this.$cookie.set("userId", response.body.userId);
+          this.$cookie.set("authToken", response.body.token);
           location.reload();
           // alert(JSON.stringify(response))
 
 
         }, function (error) {
           // alert(JSON.stringify(error));
+          this.loginErrorFlag = true
           // this.errorFlag = true;
           // this.userNameOrEmailError = error.statusText.substring(13);
           // alert(this.userNameOrEmailError);

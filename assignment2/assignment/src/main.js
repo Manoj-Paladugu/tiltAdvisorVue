@@ -4,6 +4,7 @@ import  Venues  from './Venues.vue';
 import  userVenues  from './userVenues.vue';
 import  Venue  from './Venue.vue';
 import  User  from './User.vue';
+import  Home  from './Home.vue';
 import Vuetify from 'vuetify'
 Vue.use(Vuetify);
 import VueCookie from 'vue-cookie';
@@ -25,27 +26,32 @@ Vue.use(VueResource);
 
 const routes = [
   {
-    path : "/api/v1/venues",
+    path : "/home",
+    name : "home",
+    component : Home
+  },
+  {
+    path : "/venues",
     name : "venues",
     component : Venues
   },
   {
-    path : "/api/v1/myVenues",
+    path : "/myVenues",
     name : "userVenues",
     component : userVenues
   },
   {
-    path : "/api/v1/venues/:venueId",
+    path : "/venues/:venueId",
     name : "venue",
     component : Venue
   },
   {
-    path : "/api/v1/venues/:cityName",
+    path : "/venues/:cityName",
     name : "city",
     component : Venues
   },
   {
-    path : "/api/v1/users/:id",
+    path : "/users/:id",
     name : "user",
     component : User
   }
