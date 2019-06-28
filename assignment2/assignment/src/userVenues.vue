@@ -34,20 +34,12 @@
             </router-link>
           </template>
 
-          <template slot="city" slot-scope="row">
-            <router-link @click.native="getVenuesInCity($route.params.cityName)" :to = "{ name: 'city', params: { cityName: row.value}}" >
-              <b-button v-b-modal="'my-modal'" size="sm" class="mr-1">
-                {{row.value}}
-              </b-button>
-            </router-link>
-          </template>
-
           <template slot="primaryPhoto" slot-scope="row">
               <span v-if="row.value !== ''">
               <b-img width="200" height="200" v-bind:src="getVenuePhoto(row.item.venueId,row.value)" rounded alt="Rounded image"></b-img>
               </span>
             <span v-else>
-                <b-img width="200" height="200" v-bind="mainProps" v-bind:src="getVenuePhoto(row.item.venueId,row.value)" rounded alt="Rounded image"></b-img>
+                <b-img width="200" height="200" v-bind="venuePhotoProps" :src=defaultVenuePhoto rounded alt="Rounded image"></b-img>
               </span>
           </template>
 
@@ -109,7 +101,8 @@
         pageOptions: [10, 20, 30],
         filter: null,
         error :  "",
-        mainProps: { blank: true, blankColor: '#777', width: 75, height: 75, class: 'm1' },
+        venuePhotoProps: { width: 75, height: 75, class: 'm1' },
+        defaultVenuePhoto : "src/defaultVenueImage.png",
         errorFlag :  false,
         fields: [{key: 'venueId', sortable: true}, 'venueName',{key: 'categoryId',label : 'Category', sortable: true} , 'shortDescription',  {key: 'meanStarRating', sortable: true},
           {key: 'modeCostRating', sortable: true}, 'city',{key: 'primaryPhoto',sortable: true}],

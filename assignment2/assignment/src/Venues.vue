@@ -10,34 +10,6 @@
       <div  id = "venues">
 
         <v-card-title>
-<!--          <template>-->
-<!--          <v-container id="dropdown-example" grid-list-xl>-->
-<!--            <v-layout row wrap>-->
-<!--              <v-flex xs12 sm4>-->
-<!--                <v-overflow-btn-->
-<!--                  value = ""-->
-<!--                  :items="options"-->
-<!--                  label="Drop Down"-->
-<!--                  target="#dropdown-example"-->
-<!--                ></v-overflow-btn>-->
-<!--              </v-flex>-->
-<!--            </v-layout>-->
-<!--          </v-container>-->
-<!--          </template>-->
-
-<!--          <v-spacer></v-spacer>-->
-<!--          <b-dropdown id="ddown-buttons" text="Select Category:" class="m-2"-->
-<!--                      >-->
-
-<!--            <b-dropdown-item-button v-on:click="getVenuesByCategory(1)"> Accommodation </b-dropdown-item-button>-->
-<!--            <b-dropdown-item-button v-on:click="getVenuesByCategory(2)"> Cafés & Restaurants </b-dropdown-item-button>-->
-<!--            <b-dropdown-item-button v-on:click="getVenuesByCategory(3)"> Attractions </b-dropdown-item-button>-->
-<!--            <b-dropdown-item-button v-on:click="getVenuesByCategory(4)"> Events </b-dropdown-item-button>-->
-<!--            <b-dropdown-item-button v-on:click="getVenuesByCategory(5)"> Nature Spots </b-dropdown-item-button>-->
-<!--            <b-dropdown-item-button v-on:click="getVenuesByCategory(6)"> All </b-dropdown-item-button>-->
-
-<!--          </b-dropdown>-->
-
           <div>
             <strong>Category</strong>
             <b-form-select v-model="categoryOptionSelected" :options="categoryOptions" @input="updateVenues"></b-form-select>
@@ -51,6 +23,11 @@
           <div>
             <strong>Cost Rating</strong>
             <b-form-select v-model="maxCostOptionSelected" :options="maxCostOptions" @input="updateVenues"></b-form-select>
+          </div>
+
+          <div>
+            <strong>City</strong>
+            <b-form-select v-model="cityOptionSelected" :options="cityOptions" @input="updateVenues"></b-form-select>
           </div>
 
           <div>
@@ -98,20 +75,12 @@
               </router-link>
             </template>
 
-            <template slot="city" slot-scope="row">
-              <router-link @click.native="getVenuesInCity($route.params.cityName)" :to = "{ name: 'city', params: { cityName: row.value}}" >
-                <b-button v-b-modal="'my-modal'" size="sm" class="mr-1">
-                {{row.value}}
-                </b-button>
-              </router-link>
-            </template>
-
             <template slot="primaryPhoto" slot-scope="row">
               <span v-if="row.value !== ''">
               <b-img width="200" height="200" v-bind:src="getVenuePhoto(row.item.venueId,row.value)" rounded alt="Rounded image"></b-img>
               </span>
               <span v-else>
-                <b-img width="200" height="200" v-bind="mainProps" v-bind:src="getVenuePhoto(row.item.venueId,row.value)" rounded alt="Rounded image"></b-img>
+                <b-img width="200" height="200" v-bind="venuePhotoProps" :src=defaultVenuePhoto rounded alt="Rounded image"></b-img>
               </span>
             </template>
 
@@ -129,29 +98,6 @@
               ></b-pagination>
             </b-col>
           </b-row>
-
-          <b-modal  id="my-modal" size="xl" title="Venues In The City" no-close-on-backdrop hide-footer>
-
-            <!--            {{getVenuesInCity($route.params.cityName)}}-->
-<!--             fieldsForInCity : [{key: 'venueId', sortable: true}, 'venueName',{key: 'categoryId', sortable: true} , 'shortDescription', 'latitude', 'longitude', 'meanStarRating','modeCostRating', 'city', 'primaryPhoto'],-->
-
-              <b-table striped hover :items="venuesInCity" :fields="fields">
-
-                <template slot="primaryPhoto" slot-scope="row">
-              <span v-if="row.value !== ''">
-              <b-img width="200" height="200" v-bind:src="getVenuePhoto(row.item.venueId,row.value)" rounded alt="Rounded image"></b-img>
-              </span>
-                  <span v-else>
-                <b-img width="200" height="200" v-bind="mainProps" v-bind:src="getVenuePhoto(row.item.venueId,row.value)" rounded alt="Rounded image"></b-img>
-              </span>
-                </template>
-
-              </b-table>
-
-            <router-link :to = "{ name: 'venues'}" > <b-button class="mt-3" block @click="$bvModal.hide('my-modal')">Close Me</b-button></router-link>
-
-
-          </b-modal>
         </div>
 
     </div>
@@ -173,7 +119,8 @@
         pageOptions: [10, 20, 30],
         filter: null,
         error :  "",
-        mainProps: { blank: true, blankColor: '#777', width: 75, height: 75, class: 'm1' },
+        venuePhotoProps: { width: 75, height: 75, class: 'm1' },
+        defaultVenuePhoto : "src/defaultVenueImage.png",
         errorFlag :  false,
         fields: [{key: 'venueId', sortable: true}, 'venueName',{key: 'categoryId',label : 'Category', sortable: true} , 'shortDescription',  {key: 'meanStarRating', sortable: true},
           {key: 'modeCostRating', sortable: true},{key: 'distance', sortable: true}, 'city',{key: 'primaryPhoto',sortable: true}],
@@ -212,6 +159,10 @@
         minStarRatingVal : 0,
         minStarOptionSelected: 1,
         maxCostOptionSelected : 4,
+        cityOptionSelected : 'Any',
+        cityOptions : [
+          'Any'
+        ],
         sortDistanceOptionSelected : -1,
         minStarOptions: [
           { value: 1, text: 'Any' },
@@ -246,6 +197,7 @@
       this.updateMyLocation();
       this . getCategories ();
       this.updateVenues();
+      // alert(venue)
       this.totalRows = this.venues.length;
     },
     methods : {
@@ -311,6 +263,7 @@
       // },
       updateVenues: function () {
 
+        // alert(this.cityOptionSelected);
         let paramLst = {
 
           "categoryId": this.categoryOptionSelected,
@@ -323,6 +276,10 @@
 
         if (this.search !== null && this.search !== '') {paramLst.q = this.search}
         else { delete paramLst['q']}
+        // alert(this.cityOptionSelected)
+        if (this.cityOptionSelected !== "Any") {paramLst.city = this.cityOptionSelected}
+        else {delete paramLst['city']}
+
         this.$http.get('http://localhost:4941/api/v1/venues', {
           params: paramLst
           }
@@ -335,12 +292,19 @@
           this.venues.forEach(
           (value, index) => {
 
+            if (this.cityOptions.indexOf(value.city) === -1 ) {
+              this.cityOptions.push(value.city);
+            }
+
+            console.log(value.city);
+            //USE AN ARRAY FOR OPTIONS
+
             value.categoryId = this.getCategoryById(response[index].categoryId).categoryName;
 
             if (response[index].meanStarRating === null) {response[index].meanStarRating = 3}
             if (response[index].modeCostRating === null) {response[index].modeCostRating = 0}
             // if (this.venues[index].distance !== null) {this.venues[index].distance = 0}
-            console.log("reee" + value.categoryId)
+            // console.log("reee" + value.categoryId)
           }
           );
             this.venues = response;

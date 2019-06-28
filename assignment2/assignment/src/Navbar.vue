@@ -2,10 +2,10 @@
   <div>
     <b-navbar toggleable="lg" type="dark" variant="dark">
 <!--      <b-navbar-brand href="#">Home</b-navbar-brand>-->
-      <b-navbar-nav class="ml-auto">
-        <router-link :to = "{ name: 'venues'}" ><b-button > Home </b-button> </router-link>
-        <router-link :to = "{ name: 'venues'}" ><b-button > Venues </b-button> </router-link>
-      </b-navbar-nav>
+      <div class="ml-auto">
+        <router-link :to = "{ name: 'home'}" ><b-button > Home </b-button> </router-link>
+        <router-link :to = "{ name: 'venues'}" ><b-button> Venues </b-button> </router-link>
+      </div>
 
       <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
       <b-collapse id="nav-collapse" is-nav>
@@ -273,6 +273,7 @@
         }).then(function (response) {
           // alert("here1")
           // alert(JSON.stringify(response))
+          location.reload();
           this.$router.push({name : "userVenues"})
 
         })
