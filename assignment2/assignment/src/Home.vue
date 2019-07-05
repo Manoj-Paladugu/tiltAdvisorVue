@@ -4,8 +4,8 @@
     <div>
       <b-jumbotron header="Welcome to tilt advisor">
         <b-img v-bind="mainProps" fluid :src=logo alt="Image 1" border=""></b-img>
-        <b-button block variant="outline-dark">Browse Venues</b-button>
-        <b-button block variant="outline-dark">Sign Up</b-button>
+        <router-link :to = "{ name: 'venues'}" ><b-button block variant="outline-dark">Browse Venues</b-button></router-link>
+        <router-link :to = "{ name: 'venues'}" ><b-button block variant="outline-dark">Sign Up</b-button></router-link>
 
       </b-jumbotron>
     </div>
