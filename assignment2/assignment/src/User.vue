@@ -157,7 +157,7 @@
     },
     methods : {
       deleteProfileImage : function() {
-        this.$http.delete('http://localhost:4941/api/v1/users/' + this.$route.params.id + '/photo', {
+        this.$http.delete('http://134.209.3.158:4941/api/v1/users/' + this.$route.params.id + '/photo', {
           headers: {
             'X-Authorization': this.$cookie.get('authToken')
           }
@@ -171,7 +171,7 @@
         if(!this.isFileChosen) {e.preventDefault(); return;}
         else if (this.profilePhoto.size > 1024 * 1024 * 20) {e.preventDefault(); return;}
 
-        this.$http.put('http://localhost:4941/api/v1/users/' + this.$route.params.id + '/photo', this.profilePhoto, {
+        this.$http.put('http://134.209.3.158:4941/api/v1/users/' + this.$route.params.id + '/photo', this.profilePhoto, {
           headers: {
             'Content-Type': 'image/png',
             'X-Authorization': this.$cookie.get('authToken')
@@ -185,11 +185,11 @@
       },
       getProfilePhoto : function() {
 
-        this.$http.get('http://localhost:4941/api/v1/users/' + this.$route.params.id + '/photo')
+        this.$http.get('http://134.209.3.158:4941/api/v1/users/' + this.$route.params.id + '/photo')
           .then( (response) => {
             if (response.status === 200) {
               // alert("here");
-              this.currentPhoto = 'http://localhost:4941/api/v1/users/' + this.$route.params.id + '/photo'
+              this.currentPhoto = 'http://134.209.3.158:4941/api/v1/users/' + this.$route.params.id + '/photo'
             }
           }, function (error) {
             // alert(JSON.stringify(error));
@@ -205,7 +205,7 @@
         // alert(this.oldPasswordValidation)
         if (this.oldPasswordValidation) {
           // alert("here2");
-          this.$http.patch('http://localhost:4941/api/v1/users/' + this.$route.params.id, {
+          this.$http.patch('http://134.209.3.158:4941/api/v1/users/' + this.$route.params.id, {
             "givenName": this.newGivenName,
             "familyName": this.newFamilyName,
             "password": this.newPassword
@@ -226,7 +226,7 @@
       },
       getUserInfo : function () {
         // alert(JSON.stringify(this.$route.params));
-        this.$http.get('http://localhost:4941/api/v1/users/' + this.$route.params.id,{
+        this.$http.get('http://134.209.3.158:4941/api/v1/users/' + this.$route.params.id,{
           headers: {
             'Content-Type': 'application/json',
             'X-Authorization': this.$cookie.get('authToken')

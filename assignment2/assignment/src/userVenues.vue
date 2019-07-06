@@ -176,7 +176,7 @@
     methods : {
 
       getVenues: function () {
-        this.$http.get('http://localhost:4941/api/v1/venues', {params : {"adminId": this.$cookie.get('userId')}})
+        this.$http.get('http://134.209.3.158:4941/api/v1/venues', {params : {"adminId": this.$cookie.get('userId')}})
           .then(function (response) {
             this.venues = response.data;
           }, function (error) {
@@ -220,7 +220,7 @@
       },
       getCategories: function () {
 
-        this.$http.get('http://localhost:4941/api/v1/categories')
+        this.$http.get('http://134.209.3.158:4941/api/v1/categories')
           .then(function (response) {
             this.categories = response.data;
           }, function (error) {
@@ -253,7 +253,7 @@
         // if (this.maxCostOptionSelected !== -1) {
         //   paramLst["maxCostRating"] = this.maxCostOptionSelected
         // }
-        this.$http.get('http://localhost:4941/api/v1/venues', {
+        this.$http.get('http://134.209.3.158:4941/api/v1/venues', {
             // params: paramLst
             params: paramLst
           }
@@ -282,11 +282,11 @@
         // console.log( VenuePhotoFileName)
         // if (VenuePhotoFileName === "") {console.log(venueId + "empty")}
 
-        return 'http://localhost:4941/api/v1/venues/' + venueId + '/photos/' + VenuePhotoFileName;
+        return 'http://134.209.3.158:4941/api/v1/venues/' + venueId + '/photos/' + VenuePhotoFileName;
       },
       getVenuesByCategory: function (categoryId) {
 
-        this.$http.get('http://localhost:4941/api/v1/venues/', {
+        this.$http.get('http://134.209.3.158:4941/api/v1/venues/', {
             params: {
               "categoryId": categoryId
             }
@@ -321,7 +321,7 @@
         // var allVenues = this.venues.slice();
         // console.log("boii " + allVenues)
         // this.venues = [];
-        this.$http.get('http://localhost:4941/api/v1/venues/', {
+        this.$http.get('http://134.209.3.158:4941/api/v1/venues/', {
             params: {
               // "minStarRating": id,
               "minStarRating": id
@@ -349,7 +349,7 @@
         // this.getVenues(); called onclick on dropdown
         var allVenues = this.venues.slice();
         this.venues = [];
-        this.$http.get('http://localhost:4941/api/v1/venues/', {
+        this.$http.get('http://134.209.3.158:4941/api/v1/venues/', {
             params: {
               // "minStarRating": id,
               "maxCostRating": id
