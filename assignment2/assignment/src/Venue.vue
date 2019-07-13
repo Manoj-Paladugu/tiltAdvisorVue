@@ -347,7 +347,7 @@
         this.sliding = false
       },
       setVenueImagePrimary : function() {
-        this.$http.post('http://134.209.3.158:4941/api/v1/venues/' + this.$route.params.venueId + '/photos/' + this.allVenuePhotos[this.slide] + '/setPrimary', {},{
+        this.$http.post('http://68.183.162.185:4941/api/v1/venues/' + this.$route.params.venueId + '/photos/' + this.allVenuePhotos[this.slide] + '/setPrimary', {},{
           headers: {
             'X-Authorization': this.$cookie.get('authToken')
           }
@@ -359,7 +359,7 @@
       },
       deleteVenueImage : function(){
 
-        this.$http.delete('http://134.209.3.158:4941/api/v1/venues/' + this.$route.params.venueId + '/photos/' + this.allVenuePhotos[this.slide], {
+        this.$http.delete('http://68.183.162.185:4941/api/v1/venues/' + this.$route.params.venueId + '/photos/' + this.allVenuePhotos[this.slide], {
           headers: {
             'X-Authorization': this.$cookie.get('authToken')
           }
@@ -379,7 +379,7 @@
         formData.append('description',this.description);
         formData.append('makePrimary',"true");
 
-        this.$http.post('http://134.209.3.158:4941/api/v1/venues/' + this.$route.params.venueId + '/photos', formData, {
+        this.$http.post('http://68.183.162.185:4941/api/v1/venues/' + this.$route.params.venueId + '/photos', formData, {
           headers: {
             'X-Authorization': this.$cookie.get('authToken')
           }
@@ -393,7 +393,7 @@
       },
       editAdminVenue : function() {
 
-        this.$http.patch('http://134.209.3.158:4941/api/v1/venues/' + this.$route.params.venueId, JSON.stringify({
+        this.$http.patch('http://68.183.162.185:4941/api/v1/venues/' + this.$route.params.venueId, JSON.stringify({
           venueName: this.venueName,
           categoryId: this.optionSelected,
           city: this.venueCity,
@@ -414,7 +414,7 @@
         })
       },
       addReview : function () {
-        this.$http.post('http://134.209.3.158:4941/api/v1/venues/' + this.$route.params.venueId + '/reviews', JSON.stringify({
+        this.$http.post('http://68.183.162.185:4941/api/v1/venues/' + this.$route.params.venueId + '/reviews', JSON.stringify({
           reviewBody: this.reviewBody,
           starRating: parseInt(this.starRating),
           costRating: parseInt(this.costRating)
@@ -439,7 +439,7 @@
         })
       },
       getReviews : function() {
-        this.$http.get('http://134.209.3.158:4941/api/v1/venues/' + this.$route.params.venueId + '/reviews')
+        this.$http.get('http://68.183.162.185:4941/api/v1/venues/' + this.$route.params.venueId + '/reviews')
           .then(function (response) {
             this.reviews = response.data;
             console.log("ereter")
@@ -449,7 +449,7 @@
       },
       getVenue : function () {
         // alert(JSON.stringify(this.$route.params));
-        this.$http.get('http://134.209.3.158:4941/api/v1/venues/' + this.$route.params.venueId)
+        this.$http.get('http://68.183.162.185:4941/api/v1/venues/' + this.$route.params.venueId)
           .then(function (response) {
             this.venue = response.data;
             // alert((this.venue.photos))
@@ -472,7 +472,7 @@
       },
 
       getVenues: function () {
-        this.$http.get('http://134.209.3.158:4941/api/v1/venues')
+        this.$http.get('http://68.183.162.185:4941/api/v1/venues')
           .then(function (response) {
             this.venues = response.data;
             // this.updateSearch();
@@ -517,7 +517,7 @@
       },
       getCategories: function () {
 
-        this.$http.get('http://134.209.3.158:4941/api/v1/categories')
+        this.$http.get('http://68.183.162.185:4941/api/v1/categories')
           .then(function (response) {
             this.categories = response.data;
           }, function (error) {
@@ -565,7 +565,7 @@
         // if (this.maxCostOptionSelected !== -1) {
         //   paramLst["maxCostRating"] = this.maxCostOptionSelected
         // }
-        this.$http.get('http://134.209.3.158:4941/api/v1/venues', {
+        this.$http.get('http://68.183.162.185:4941/api/v1/venues', {
             // params: paramLst
             params: paramLst
           }
@@ -594,11 +594,11 @@
         // console.log( VenuePhotoFileName)
         // if (VenuePhotoFileName === "") {console.log(venueId + "empty")}
 
-        return 'http://134.209.3.158:4941/api/v1/venues/' + this.$route.params.venueId + '/photos/' + VenuePhotoFileName;
+        return 'http://68.183.162.185:4941/api/v1/venues/' + this.$route.params.venueId + '/photos/' + VenuePhotoFileName;
       },
       getVenuesByCategory: function (categoryId) {
 
-        this.$http.get('http://134.209.3.158:4941/api/v1/venues/', {
+        this.$http.get('http://68.183.162.185:4941/api/v1/venues/', {
             params: {
               "categoryId": categoryId
             }
@@ -633,7 +633,7 @@
         // var allVenues = this.venues.slice();
         // console.log("boii " + allVenues)
         // this.venues = [];
-        this.$http.get('http://134.209.3.158:4941/api/v1/venues/', {
+        this.$http.get('http://68.183.162.185:4941/api/v1/venues/', {
             params: {
               // "minStarRating": id,
               "minStarRating": id
@@ -661,7 +661,7 @@
         // this.getVenues(); called onclick on dropdown
         var allVenues = this.venues.slice();
         this.venues = [];
-        this.$http.get('http://134.209.3.158:4941/api/v1/venues/', {
+        this.$http.get('http://68.183.162.185:4941/api/v1/venues/', {
             params: {
               // "minStarRating": id,
               "maxCostRating": id

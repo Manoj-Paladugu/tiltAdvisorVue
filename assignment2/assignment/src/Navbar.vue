@@ -256,7 +256,7 @@
     methods: {
       createVenue : function () {
 
-        this.$http.post('http://134.209.3.158:4941/api/v1/venues', JSON.stringify({
+        this.$http.post('http://68.183.162.185:4941/api/v1/venues', JSON.stringify({
           venueName: this.venueName,
           categoryId: this.optionSelected,
           city: this.venueCity,
@@ -301,7 +301,7 @@
 
         // alert(this.count)
         if (this.validation && this.passwordValidation) {
-          this.$http.post('http://134.209.3.158:4941/api/v1/users', JSON.stringify({
+          this.$http.post('http://68.183.162.185:4941/api/v1/users', JSON.stringify({
             givenName: this.givenName,
             familyName: this.familyName,
             email: this.email,
@@ -341,7 +341,7 @@
         // evt.preventDefault();
         // setTimeout( function () {console.log("after 3 secs")},3000)
 
-        this.$http.post('http://134.209.3.158:4941/api/v1/users/login', JSON.stringify({
+        this.$http.post('http://68.183.162.185:4941/api/v1/users/login', JSON.stringify({
           username: this.username,
           email: this.email,
           password: this.password

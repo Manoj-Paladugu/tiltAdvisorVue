@@ -71,7 +71,7 @@
             <td> {{ venue.modeCostRating }} </td>
             <td> {{ venue.primaryPhoto }} </td>
 
-<!--            <img src="http://134.209.3.158:4941/api/v1/venues/1/photos/testFile-1557557876254.jpeg" width="300px">-->
+<!--            <img src="http://68.183.162.185:4941/api/v1/venues/1/photos/testFile-1557557876254.jpeg" width="300px">-->
             <td><router-link :to = "{ name: 'city', params: { cityName: venue.city}}" >
               <button  type = "button"  class = "btn btn-primary"  data-toggle = "modal"
                        data-target = "#viewVenuesInCity">
@@ -211,7 +211,7 @@
       //   console.log("reeee" +JSON.stringify( this.res));
       // },
       getVenues: function () {
-        this.$http.get('http://134.209.3.158:4941/api/v1/venues')
+        this.$http.get('http://68.183.162.185:4941/api/v1/venues')
           .then(function (response) {
             this.venues = response.data;
             // this.populateTable();
@@ -233,7 +233,7 @@
       },
       getCategories: function () {
 
-        this.$http.get('http://134.209.3.158:4941/api/v1/categories')
+        this.$http.get('http://68.183.162.185:4941/api/v1/categories')
           .then(function (response) {
             this.categories = response.data;
           }, function (error) {
@@ -260,7 +260,7 @@
         }
       },
       updateSearch: function () {
-        this.$http.get('http://134.209.3.158:4941/api/v1/venues', {
+        this.$http.get('http://68.183.162.185:4941/api/v1/venues', {
             params: {
               "q": this.searchTerm,
               "categoryId": this.categoryId
