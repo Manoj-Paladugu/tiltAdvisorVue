@@ -21,24 +21,25 @@
         <div class="container">
 
           <div class="row">
-            <div class="col-sm" style="color: #FFFFFF; text-align: right">
+            <div class="col col-lg-2"></div>
+            <div class="col-sm" style="color: #FFFFFF; text-align: left">
               <h3>My Main Projects</h3>
               <ul class="links">
                 <li>
-                  <a href="http://www.manoj.nz/" title="Visit ffsend GitHub page" target="_blank">tiltAdvisor</a>
+                  <a href="http://www.manoj.nz/" title="Visit tiltAdvisor webpage!" target="_blank">tiltAdvisor</a>
                   <p>
                     Venue review web application
                   </p>
                   <p>Single page application using Vue.js</p>
                   <p>RESTful API using Node.js with Express.</p>
                 </li>
-
                 <li>
-                  <a target="_blank" style="color: #FFFFFF">Currently working on a travel assistant app</a>
-                  <p>
-                    Ongoing year long project
-                  </p>
+                  <a href="https://csse-s302g6.canterbury.ac.nz" title="Visit Paradise Travels!" target="_blank">Personal executive travel assistant</a>
+
+                  <p>Currently working on a travel assistant application</p>
+                  <p>Play framework</p>
                 </li>
+
               </ul>
             </div>
 
@@ -49,6 +50,7 @@
                 <li><a href="https://www.linkedin.com/in/manoj-paladugu-515938170/" title="Visit my LinkedIn profile" target="_blank">LinkedIn</a></li>
               </ul>
             </div>
+            <div class="col col-lg-2"></div>
           </div>
         </div>
 
