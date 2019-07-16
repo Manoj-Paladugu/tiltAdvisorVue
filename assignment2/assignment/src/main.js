@@ -1,10 +1,13 @@
 import Vue from 'vue'
+import VueTypedJs from 'vue-typed-js'
+Vue.use(VueTypedJs)
 import App from './App.vue'
 import  Venues  from './Venues.vue';
 import  userVenues  from './userVenues.vue';
 import  Venue  from './Venue.vue';
 import  User  from './User.vue';
 import  Home  from './Home.vue';
+import  Portfolio  from './Portfolio.vue';
 import Vuetify from 'vuetify'
 Vue.use(Vuetify);
 import VueCookie from 'vue-cookie';
@@ -28,6 +31,11 @@ const routes = [
   {
     path: '/',
     redirect: '/home'
+  },
+  {
+    path : "/portfolio",
+    name : "portfolio",
+    component : Portfolio
   },
   {
     path : "/home",

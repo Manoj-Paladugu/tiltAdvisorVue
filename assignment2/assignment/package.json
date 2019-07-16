@@ -16,6 +16,7 @@
     "vue-cookie": "^1.1.4",
     "vue-resource": "^1.5.1",
     "vue-router": "^3.0.6",
+    "vue-typed-js": "^0.1.2",
     "vuelidate": "^0.7.4",
     "vuetify": "^1.5.14"
   },
