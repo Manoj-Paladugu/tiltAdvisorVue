@@ -19,8 +19,7 @@
           </div>
         </div>
         <div class="container">
-
-          <div class="row">
+          <div class="row slide-down">
             <div class="col col-lg-2"></div>
             <div class="col-sm" style="color: #FFFFFF; text-align: left">
               <h3>My Main Projects</h3>
@@ -78,8 +77,23 @@
 </script>
 
 <style>
+  ::-webkit-scrollbar {
+    display: none;
+  }
   body {
     background-image: url("./assets/background-wallpaper.jpg");
+  }
+  .slide-down {
+    opacity: 0;
+
+    animation: fadeIn 3s;
+    animation-delay: 3s;
+    animation-fill-mode: forwards;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
   }
   .sub-title {
     font-family: "Ubuntu", Helvetica, Arial, sans-serif;
@@ -127,6 +141,7 @@
 
   .links li {
     margin-bottom: .6em;
+    display: list-item;
   }
 
   .links p {
