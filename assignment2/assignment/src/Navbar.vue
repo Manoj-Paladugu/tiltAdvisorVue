@@ -4,13 +4,16 @@
 <!--      <b-navbar-brand href="#">Home</b-navbar-brand>-->
       <div class="ml-auto">
         <router-link :to = "{ name: 'home'}" ><b-button > Home </b-button> </router-link>
-        <router-link :to = "{ name: 'venues'}" ><b-button> Venues </b-button> </router-link>
+        <router-link :to = "{ name: 'venues'}" ><b-button> Browse Venues </b-button> </router-link>
       </div>
 
       <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
       <b-collapse id="nav-collapse" is-nav>
         <!-- Right aligned nav items -->
         <b-navbar-nav class="ml-auto">
+          <b-navbar-nav right>
+            <router-link :to = "{ name: 'portfolio'}" ><b-button> Visit My Portfolio </b-button> </router-link>
+          </b-navbar-nav>
           <b-navbar-nav right v-if="this.$cookie.get('authToken')">
             <b-nav-item :to = "{ name: 'user', params: { id: this.$cookie.get('userId')}}" v-if="this.$cookie.get('authToken')">View Profile</b-nav-item>
           </b-navbar-nav>
@@ -286,10 +289,11 @@
           headers: {
             'X-Authorization': this.$cookie.get('authToken')
           }
-        }).then(function (response) {
+        }).then( (res) => {
           this.$cookie.delete("userId");
           this.$cookie.delete("authToken");
           location.reload();
+          console.log(res)
         }
         );
 

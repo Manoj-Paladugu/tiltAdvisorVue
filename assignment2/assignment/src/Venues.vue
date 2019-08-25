@@ -9,42 +9,57 @@
     <Navbar></Navbar>
       <div  id = "venues">
 
-        <v-card-title>
-          <div>
+<!--        <b-container>-->
+        <b-row>
+
+          <b-col sm="1">
             <strong>Category</strong>
+          </b-col>
+          <b-col sm="1">
             <b-form-select v-model="categoryOptionSelected" :options="categoryOptions" @input="updateVenues"></b-form-select>
-          </div>
+          </b-col>
 
-          <div>
+          <b-col sm="1">
             <strong>Star Rating</strong>
+          </b-col>
+          <b-col sm="1">
             <b-form-select v-model="minStarOptionSelected" :options="minStarOptions" @input="updateVenues"></b-form-select>
-          </div>
+          </b-col>
 
-          <div>
+          <b-col sm="1">
             <strong>Cost Rating</strong>
+          </b-col>
+          <b-col sm="1">
             <b-form-select v-model="maxCostOptionSelected" :options="maxCostOptions" @input="updateVenues"></b-form-select>
-          </div>
+          </b-col>
 
-          <div>
+          <b-col sm="1">
             <strong>City</strong>
+          </b-col>
+          <b-col sm="1">
             <b-form-select v-model="cityOptionSelected" :options="cityOptions" @input="updateVenues"></b-form-select>
-          </div>
+          </b-col>
 
-          <div>
-            <b-button @click="updateVenues">View Distance</b-button>
-          </div>
+<!--          <div>-->
+<!--            <b-button @click="updateVenues">View Distance</b-button>-->
+<!--          </div>-->
 
-
-
+          <b-col sm="3">
           <v-text-field
             v-model="search"
             append-icon="search"
-            label=""
+            label="Search"
             single-line
             hide-details
             @input="updateVenues"
           ></v-text-field>
-        </v-card-title>
+          </b-col>
+        </b-row>
+
+
+
+
+<!--        </b-container>-->
         <div>
           <b-row>
             <b-col md="6" class="my-1">
